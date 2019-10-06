@@ -1,5 +1,8 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import RedirectableNewPosition from "../new_position_form/fillablePosition";
+import ApplicationForm from "../application_form/fillableApplication";
+import ApplicantsByCourse from "../applicants_by_course";
 import Dashboard from "../dashboard";
 import ControlPanel from "../cp_control_panel/ControlPanel";
 import { AdminIstructorsView } from "../instructors";
@@ -16,6 +19,12 @@ export function AdminRoutes() {
             </Route>
             <Route exact path="/tapp/sessions">
                 <AdminSessionsView />
+            </Route>
+            <Route exact path="/tapp/applicants">
+                <ApplicantsByCourse />
+            </Route>
+            <Route exact path="/tapp/positions/new">
+                <RedirectableNewPosition />
             </Route>
             <Route exact path="/tapp/contract_templates">
                 <AdminContractTemplatesView />

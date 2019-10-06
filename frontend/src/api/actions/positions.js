@@ -169,6 +169,13 @@ export const positionsSelector = createSelector(
     }
 );
 
+export const findPositionByIdSelector = createSelector(
+    [positionsSelector, (_, positionId) => positionId],
+    (positions, positionId) => {
+        return positions.find(({ id }) => id === positionId);
+    }
+);
+
 // Any time the active session changes, we want to refetch
 // all data. Calling `runOnActiveSessionChange` ensures that
 // when the active session changes all data is re-fetched

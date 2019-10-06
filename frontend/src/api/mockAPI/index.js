@@ -1,5 +1,6 @@
 import Route from "route-parser";
 import { mockData } from "./data";
+import { applicationsRoutes } from "./applications";
 import { sessionsRoutes } from "./sessions";
 import { templatesRoutes } from "./contract_templates";
 import { positionsRoutes } from "./positions";
@@ -7,7 +8,6 @@ import { instructorsRoutes } from "./instructors";
 import { documentCallback } from "../defs/doc-generation";
 import { assignmentsRoutes } from "./assignments";
 import { applicantsRoutes } from "./applicants";
-import { applicationsRoutes } from "./applications";
 import { wageChunkRoutes } from "./wage_chunks";
 
 /**
@@ -21,6 +21,7 @@ export class MockAPI {
     // a list of selectors for each route
     getRoutes = Object.assign(
         {},
+        applicationsRoutes.get,
         sessionsRoutes.get,
         templatesRoutes.get,
         positionsRoutes.get,
