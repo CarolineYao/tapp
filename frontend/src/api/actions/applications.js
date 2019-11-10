@@ -8,12 +8,15 @@ import {
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
+    arrayToHash,
     runOnActiveSessionChange,
     validatedApiDispatcher
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { applicationsReducer } from "../reducers/applications";
 import { createSelector } from "reselect";
+import { applicantsSelector } from "./applicants";
+import { positionsSelector } from "./positions";
 
 // actions
 const fetchApplicationsSuccess = actionFactory(FETCH_APPLICATIONS_SUCCESS);
@@ -88,9 +91,25 @@ export const deleteApplication = validatedApiDispatcher({
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
 export const localStoreSelector = applicationsReducer._localStoreSelector;
-export const applicationsSelector = createSelector(
+export const _applicationsSelector = createSelector(
     localStoreSelector,
     state => state._modelData
+);
+
+export const applicationsSelector = createSelector(
+    [_applicationsSelector, applicantsSelector, positionsSelector],
+    (applications, applicants, positions) => {
+        if (applications.length === 0) {
+            return [];
+        }
+        applicants = arrayToHash(applicants);
+        positions = arrayToHash(positions);
+        return applications.map(({ position_id, applicant_id, ...rest }) => ({
+            ...rest,
+            position: positions[position_id] || {},
+            applicant: applicants[applicant_id] || {}
+        }));
+    }
 );
 
 // Any time the active session changes, we want to refetch
