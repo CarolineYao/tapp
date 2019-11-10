@@ -8,12 +8,17 @@ import {
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
+    arrayToHash,
     runOnActiveSessionChange,
-    validatedApiDispatcher
+    validatedApiDispatcher,
+    flattenIdFactory,
+    splitObjByProps
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { applicationsReducer } from "../reducers/applications";
 import { createSelector } from "reselect";
+import { applicantsSelector } from "./applicants";
+import { positionsSelector } from "./positions";
 import { activeRoleSelector } from "./users";
 
 // actions
@@ -25,6 +30,21 @@ const upsertOneApplicationSuccess = actionFactory(
 const deleteOneApplicationSuccess = actionFactory(
     DELETE_ONE_APPLICATION_SUCCESS
 );
+
+const applicantToApplicantId = flattenIdFactory("applicant", "applicant_id");
+const positionToPositionId = flattenIdFactory("position", "position_id");
+function prepForApi(data) {
+    const propName = "position_preferences";
+    const [ret, filtered] = splitObjByProps(data, [propName]);
+
+    if (filtered[propName].length > 0) {
+        ret[propName] = (filtered[propName] || []).map(preference =>
+            positionToPositionId(preference)
+        );
+    }
+
+    return applicantToApplicantId(ret);
+}
 
 // dispatchers
 export const fetchApplications = validatedApiDispatcher({
@@ -66,7 +86,7 @@ export const upsertApplication = validatedApiDispatcher({
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
             `/${role}/sessions/${activeSessionId}/applications`,
-            payload
+            prepForApi(payload)
         );
         dispatch(upsertOneApplicationSuccess(data));
     }
@@ -82,7 +102,7 @@ export const deleteApplication = validatedApiDispatcher({
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
             `/${role}/sessions/${activeSessionId}/applications/delete`,
-            payload
+            prepForApi(payload)
         );
         dispatch(deleteOneApplicationSuccess(data));
     }
@@ -95,9 +115,39 @@ export const deleteApplication = validatedApiDispatcher({
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
 export const localStoreSelector = applicationsReducer._localStoreSelector;
-export const applicationsSelector = createSelector(
+export const _applicationsSelector = createSelector(
     localStoreSelector,
     state => state._modelData
+);
+
+// Get the current list of applications and recompute `applicant_id` and `position_id`
+// to have corresponding `applicant` and `position` objects
+export const applicationsSelector = createSelector(
+    [_applicationsSelector, applicantsSelector, positionsSelector],
+    (applications, applicants, positions) => {
+        if (applications.length === 0) {
+            return [];
+        }
+
+        const applicantsById = arrayToHash(applicants);
+        const positionsById = arrayToHash(positions);
+
+        // Change `applicant_id` to the corresponding `applicant` object
+        // and similarly, change each `position_id` in each entry of
+        // `position_preferences` to corresponding `position` object.
+        return applications.map(
+            ({ position_preferences, applicant_id, ...rest }) => ({
+                ...rest,
+                applicant: applicantsById[applicant_id] || {},
+                position_preferences: (position_preferences || []).map(
+                    ({ position_id, ...rest }) => ({
+                        position: positionsById[position_id],
+                        ...rest
+                    })
+                )
+            })
+        );
+    }
 );
 
 // Any time the active session changes, we want to refetch

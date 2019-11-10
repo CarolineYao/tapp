@@ -7,12 +7,16 @@ import { AdminSessionsView } from "../sessions";
 import { AdminPositionsView } from "../positions";
 import { AdminAssignmentsView } from "../assignments";
 import { AdminContractTemplatesView } from "../contract_template";
+import { AdminApplicantsByPosition } from "../applicants_by_position";
 
 export function AdminRoutes() {
     return (
         <Switch>
             <Route exact path="/">
                 <Redirect to="/tapp" />
+            </Route>
+            <Route exact path="/tapp/applicants_by_course">
+                <AdminApplicantsByPosition />
             </Route>
             <Route exact path="/tapp/sessions">
                 <AdminSessionsView />
