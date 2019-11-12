@@ -66,13 +66,6 @@ function generatePropTypes(PropTypes) {
                     applicant_id: id,
                     instructor_id: id
                 })
-            ),
-            positionPreference: PropTypes.arrayOf(
-                PropTypes.shape({
-                    preference_level: PropTypes.number,
-                    application_id: id,
-                    instructor_id: id
-                })
             )
         }),
         instructor: PropTypes.shape({
@@ -141,7 +134,12 @@ function generatePropTypes(PropTypes) {
             yip: PropTypes.number,
             annotation: PropTypes.string,
             applicant_id: id,
-            position_id: id
+            positionPreference: PropTypes.arrayOf(
+                PropTypes.shape({
+                    preference_level: PropTypes.number,
+                    position_id: id
+                })
+            )
         })
     };
 }

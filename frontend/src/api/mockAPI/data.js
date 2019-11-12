@@ -113,7 +113,7 @@ export const mockData = {
             current_enrollment: 1200,
             current_waitlisted: 200,
             instructor_ids: [1000, 1001],
-            instructorPreference: [
+            instructor_preferences: [
                 {
                     preference_level: 2,
                     applicant_id: 2000,
@@ -139,20 +139,6 @@ export const mockData = {
                     applicant_id: 2006,
                     instructor_id: 1001
                 }
-            ],
-            positionPreference: [
-                {
-                    preference_level: 2,
-                    application_id: 2
-                },
-                {
-                    preference_level: 3,
-                    application_id: 3
-                },
-                {
-                    preference_level: 1,
-                    application_id: 4
-                }
             ]
         },
         {
@@ -163,21 +149,7 @@ export const mockData = {
             start_date: "2019-09-08T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
             contract_template_id: 2,
-            instructor_ids: [],
-            positionPreference: [
-                {
-                    preference_level: 3,
-                    application_id: 4
-                },
-                {
-                    preference_level: 2,
-                    application_id: 2
-                },
-                {
-                    preference_level: 3,
-                    application_id: 5
-                }
-            ]
+            instructor_ids: []
         },
         {
             id: 12,
@@ -189,7 +161,7 @@ export const mockData = {
             duties: "Tutorials",
             contract_template_id: 3,
             instructor_ids: [1000],
-            instructorPreference: [
+            instructor_preferences: [
                 {
                     preference_level: -1,
                     applicant_id: 2005,
@@ -205,20 +177,6 @@ export const mockData = {
                     applicant_id: 2006,
                     instructor_id: 1000
                 }
-            ],
-            positionPreference: [
-                {
-                    preference_level: 1,
-                    application_id: 3
-                },
-                {
-                    preference_level: 3,
-                    application_id: 2
-                },
-                {
-                    preference_level: 2,
-                    application_id: 4
-                }
             ]
         },
         {
@@ -229,7 +187,19 @@ export const mockData = {
             start_date: "2019-09-08T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
             contract_template_id: 3,
-            instructor_ids: [1002]
+            instructor_ids: [1002],
+            instructor_preferences: [
+                {
+                    preference_level: 2,
+                    applicant_id: 2000,
+                    instructor_id: 1002
+                },
+                {
+                    preference_level: 1,
+                    applicant_id: 2002,
+                    instructor_id: 1002
+                }
+            ]
         },
         {
             instructor_ids: [1002],
@@ -562,7 +532,16 @@ export const mockData = {
             annotation: "",
             session_id: 1,
             applicant_id: 2000,
-            position_id: 10
+            application_preferences: [
+                {
+                    preference_level: 2,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                }
+            ]
         },
         {
             comments: "",
@@ -573,7 +552,16 @@ export const mockData = {
             annotation: "",
             session_id: 1,
             applicant_id: 2001,
-            position_id: 10
+            application_preferences: [
+                {
+                    preference_level: 0,
+                    position_id: 12
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                }
+            ]
         },
         {
             comments: "",
@@ -584,7 +572,24 @@ export const mockData = {
             annotation: "",
             session_id: 1,
             applicant_id: 2002,
-            position_id: 10
+            application_preferences: [
+                {
+                    preference_level: 3,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                },
+                {
+                    preference_level: 2,
+                    position_id: 12
+                },
+                {
+                    preference_level: 0,
+                    position_id: 11
+                }
+            ]
         },
         {
             comments: "",
@@ -595,7 +600,24 @@ export const mockData = {
             annotation: "",
             session_id: 1,
             applicant_id: 2005,
-            position_id: 10
+            application_preferences: [
+                {
+                    preference_level: 2,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                },
+                {
+                    preference_level: 0,
+                    position_id: 12
+                },
+                {
+                    preference_level: 1,
+                    position_id: 11
+                }
+            ]
         },
         {
             comments: "",
@@ -606,7 +628,20 @@ export const mockData = {
             annotation: "",
             session_id: 1,
             applicant_id: 2006,
-            position_id: 10
+            application_preferences: [
+                {
+                    preference_level: 3,
+                    position_id: 10
+                },
+                {
+                    preference_level: 0,
+                    position_id: 13
+                },
+                {
+                    preference_level: 2,
+                    position_id: 12
+                }
+            ]
         },
         {
             comments: "",
@@ -617,7 +652,24 @@ export const mockData = {
             annotation: "",
             session_id: 2,
             applicant_id: 2002,
-            position_id: 10
+            application_preferences: [
+                {
+                    preference_level: 3,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                },
+                {
+                    preference_level: 2,
+                    position_id: 12
+                },
+                {
+                    preference_level: 0,
+                    position_id: 11
+                }
+            ]
         },
         {
             comments: "",
@@ -628,7 +680,24 @@ export const mockData = {
             annotation: "",
             session_id: 2,
             applicant_id: 2003,
-            position_id: 10
+            application_preferences: [
+                {
+                    preference_level: 3,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                },
+                {
+                    preference_level: 2,
+                    position_id: 12
+                },
+                {
+                    preference_level: 0,
+                    position_id: 11
+                }
+            ]
         },
         {
             comments: "",
@@ -639,7 +708,16 @@ export const mockData = {
             annotation: "",
             session_id: 2,
             applicant_id: 2004,
-            position_id: 10
+            application_preferences: [
+                {
+                    preference_level: 1,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                }
+            ]
         }
     ]
 };

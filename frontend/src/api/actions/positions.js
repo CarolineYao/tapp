@@ -18,6 +18,7 @@ import { positionsReducer } from "../reducers/positions";
 import { createSelector } from "reselect";
 import { instructorsSelector } from "./instructors";
 import { contractTemplatesSelector } from "./contract_templates";
+import { applicantsSelector } from "./applicants";
 
 // actions
 const fetchPositionsSuccess = actionFactory(FETCH_POSITIONS_SUCCESS);
@@ -112,19 +113,37 @@ const _positionsSelector = createSelector(
  * information.
  */
 export const positionsSelector = createSelector(
-    [_positionsSelector, instructorsSelector, contractTemplatesSelector],
-    (positions, instructors, contractTemplates) => {
+    [
+        _positionsSelector,
+        instructorsSelector,
+        contractTemplatesSelector,
+        applicantsSelector
+    ],
+    (positions, instructors, contractTemplates, applicants) => {
         // Hash the instructors by `id` for fast lookup
         const instructorsById = arrayToHash(instructors);
         const contractTemplatesById = arrayToHash(contractTemplates);
+        const applicantsById = arrayToHash(applicants);
 
         // Leave all the data alone, except replace the `instructor_ids` list
         // with the full instructor data.
         return positions.map(
-            ({ instructor_ids, contract_template_id, ...rest }) => ({
+            ({
+                instructor_ids,
+                contract_template_id,
+                instructor_preferences,
+                ...rest
+            }) => ({
                 ...rest,
                 instructors: instructor_ids.map(x => instructorsById[x]),
-                contract_template: contractTemplatesById[contract_template_id]
+                contract_template: contractTemplatesById[contract_template_id],
+                instructor_preferences: (instructor_preferences || []).map(
+                    ({ applicant_id, instructor_id, ...rest }) => ({
+                        instructor: instructorsById[instructor_id],
+                        applicant: applicantsById[applicant_id],
+                        ...rest
+                    })
+                )
             })
         );
     }

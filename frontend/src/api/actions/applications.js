@@ -102,13 +102,22 @@ export const applicationsSelector = createSelector(
         if (applications.length === 0) {
             return [];
         }
-        applicants = arrayToHash(applicants);
-        positions = arrayToHash(positions);
-        return applications.map(({ position_id, applicant_id, ...rest }) => ({
-            ...rest,
-            position: positions[position_id] || {},
-            applicant: applicants[applicant_id] || {}
-        }));
+
+        const applicantsById = arrayToHash(applicants);
+        const positionsById = arrayToHash(positions);
+
+        return applications.map(
+            ({ application_preferences, applicant_id, ...rest }) => ({
+                ...rest,
+                applicant: applicantsById[applicant_id] || {},
+                application_preferences: (application_preferences || []).map(
+                    ({ position_id, ...rest }) => ({
+                        position: positionsById[position_id],
+                        ...rest
+                    })
+                )
+            })
+        );
     }
 );
 
