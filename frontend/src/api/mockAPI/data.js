@@ -532,14 +532,14 @@ export const mockData = {
             annotation: "",
             session_id: 1,
             applicant_id: 2000,
-            application_preferences: [
+            position_preferences: [
                 {
                     preference_level: 2,
                     position_id: 10
                 },
                 {
                     preference_level: 3,
-                    position_id: 13
+                    position_id: 15
                 }
             ]
         },
@@ -552,7 +552,7 @@ export const mockData = {
             annotation: "",
             session_id: 1,
             applicant_id: 2001,
-            application_preferences: [
+            position_preferences: [
                 {
                     preference_level: 0,
                     position_id: 12
@@ -572,7 +572,7 @@ export const mockData = {
             annotation: "",
             session_id: 1,
             applicant_id: 2002,
-            application_preferences: [
+            position_preferences: [
                 {
                     preference_level: 3,
                     position_id: 10
@@ -600,7 +600,7 @@ export const mockData = {
             annotation: "",
             session_id: 1,
             applicant_id: 2005,
-            application_preferences: [
+            position_preferences: [
                 {
                     preference_level: 2,
                     position_id: 10
@@ -628,7 +628,7 @@ export const mockData = {
             annotation: "",
             session_id: 1,
             applicant_id: 2006,
-            application_preferences: [
+            position_preferences: [
                 {
                     preference_level: 3,
                     position_id: 10
@@ -652,7 +652,7 @@ export const mockData = {
             annotation: "",
             session_id: 2,
             applicant_id: 2002,
-            application_preferences: [
+            position_preferences: [
                 {
                     preference_level: 3,
                     position_id: 10
@@ -680,7 +680,7 @@ export const mockData = {
             annotation: "",
             session_id: 2,
             applicant_id: 2003,
-            application_preferences: [
+            position_preferences: [
                 {
                     preference_level: 3,
                     position_id: 10
@@ -708,7 +708,7 @@ export const mockData = {
             annotation: "",
             session_id: 2,
             applicant_id: 2004,
-            application_preferences: [
+            position_preferences: [
                 {
                     preference_level: 1,
                     position_id: 10

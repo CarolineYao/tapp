@@ -10,7 +10,8 @@ import {
     actionFactory,
     arrayToHash,
     runOnActiveSessionChange,
-    validatedApiDispatcher
+    validatedApiDispatcher,
+    flattenIdFactory
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { applicationsReducer } from "../reducers/applications";
@@ -27,6 +28,16 @@ const upsertOneApplicationSuccess = actionFactory(
 const deleteOneApplicationSuccess = actionFactory(
     DELETE_ONE_APPLICATION_SUCCESS
 );
+
+const applicantToApplicantId = flattenIdFactory("applicant", "applicant_id");
+const positionToPositionId = flattenIdFactory("position", "position_id");
+function prepForApi(data) {
+    data.position_preferences = (
+        data.position_preferences || []
+    ).map(preference => positionToPositionId(preference));
+
+    return applicantToApplicantId(data);
+}
 
 // dispatchers
 export const fetchApplications = validatedApiDispatcher({
@@ -63,7 +74,7 @@ export const upsertApplication = validatedApiDispatcher({
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
             `/sessions/${activeSessionId}/applications`,
-            payload
+            prepForApi(payload)
         );
         dispatch(upsertOneApplicationSuccess(data));
     }
@@ -78,7 +89,7 @@ export const deleteApplication = validatedApiDispatcher({
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
             `/sessions/${activeSessionId}/applications/delete`,
-            payload
+            prepForApi(payload)
         );
         dispatch(deleteOneApplicationSuccess(data));
     }
@@ -107,10 +118,10 @@ export const applicationsSelector = createSelector(
         const positionsById = arrayToHash(positions);
 
         return applications.map(
-            ({ application_preferences, applicant_id, ...rest }) => ({
+            ({ position_preferences, applicant_id, ...rest }) => ({
                 ...rest,
                 applicant: applicantsById[applicant_id] || {},
-                application_preferences: (application_preferences || []).map(
+                position_preferences: (position_preferences || []).map(
                     ({ position_id, ...rest }) => ({
                         position: positionsById[position_id],
                         ...rest

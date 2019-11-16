@@ -60,7 +60,7 @@ function generatePropTypes(PropTypes) {
             current_enrollment: PropTypes.number,
             current_waitlisted: PropTypes.number,
             instructor_ids: PropTypes.arrayOf(id),
-            instructorPreference: PropTypes.arrayOf(
+            instructor_preference: PropTypes.arrayOf(
                 PropTypes.shape({
                     preference_level: PropTypes.number,
                     applicant_id: id,
@@ -134,7 +134,7 @@ function generatePropTypes(PropTypes) {
             yip: PropTypes.number,
             annotation: PropTypes.string,
             applicant_id: id,
-            positionPreference: PropTypes.arrayOf(
+            position_preference: PropTypes.arrayOf(
                 PropTypes.shape({
                     preference_level: PropTypes.number,
                     position_id: id
