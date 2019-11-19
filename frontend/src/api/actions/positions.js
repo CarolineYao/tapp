@@ -11,7 +11,8 @@ import {
     runOnActiveSessionChange,
     validatedApiDispatcher,
     arrayToHash,
-    flattenIdFactory
+    flattenIdFactory,
+    splitObjByProps
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { positionsReducer } from "../reducers/positions";
@@ -72,14 +73,19 @@ const instructorToInstructorId = flattenIdFactory(
 const applicantToApplicantId = flattenIdFactory("applicant", "applicant_id");
 
 function prepForApi(data) {
-    data.instructor_preferences = (
-        data.instructor_preferences || []
-    ).map(preference =>
+    const propName = "instructor_preferences";
+    const [ret, filtered] = splitObjByProps(data, [propName]);
+
+    if (filtered.length <= 0) {
+        return data;
+    }
+
+    ret[propName] = filtered[propName].map(preference =>
         applicantToApplicantId(instructorToInstructorId(preference))
     );
 
     return contractTemplateToContractTemplateId(
-        instructorsToInstructorIds(data)
+        instructorsToInstructorIds(ret)
     );
 }
 

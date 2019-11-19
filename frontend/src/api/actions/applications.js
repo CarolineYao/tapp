@@ -11,7 +11,8 @@ import {
     arrayToHash,
     runOnActiveSessionChange,
     validatedApiDispatcher,
-    flattenIdFactory
+    flattenIdFactory,
+    splitObjByProps
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { applicationsReducer } from "../reducers/applications";
@@ -32,11 +33,18 @@ const deleteOneApplicationSuccess = actionFactory(
 const applicantToApplicantId = flattenIdFactory("applicant", "applicant_id");
 const positionToPositionId = flattenIdFactory("position", "position_id");
 function prepForApi(data) {
-    data.position_preferences = (
-        data.position_preferences || []
-    ).map(preference => positionToPositionId(preference));
+    const propName = "position_preferences";
+    const [ret, filtered] = splitObjByProps(data, [propName]);
 
-    return applicantToApplicantId(data);
+    if (filtered.length <= 0) {
+        return data;
+    }
+
+    ret[propName] = filtered[propName].map(preference =>
+        positionToPositionId(preference)
+    );
+
+    return applicantToApplicantId(ret);
 }
 
 // dispatchers
@@ -107,6 +115,8 @@ export const _applicationsSelector = createSelector(
     state => state._modelData
 );
 
+// Get the current list of applications and recompute `applicant_id` and `position_id`
+// to have corresponding `applicant` and `position` objects
 export const applicationsSelector = createSelector(
     [_applicationsSelector, applicantsSelector, positionsSelector],
     (applications, applicants, positions) => {
@@ -117,6 +127,9 @@ export const applicationsSelector = createSelector(
         const applicantsById = arrayToHash(applicants);
         const positionsById = arrayToHash(positions);
 
+        // Change `applicant_id` to the corresponding `applicant` object
+        // and similarly, change each `position_id` in each entry of
+        // `position_preferences` to corresponding `position` object.
         return applications.map(
             ({ position_preferences, applicant_id, ...rest }) => ({
                 ...rest,
