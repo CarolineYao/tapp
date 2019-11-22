@@ -76,7 +76,7 @@ function prepForApi(data) {
     const propName = "instructor_preferences";
     const [ret, filtered] = splitObjByProps(data, [propName]);
 
-    if (filtered.length > 0) {
+    if (filtered[propName].length > 0) {
         ret[propName] = (filtered[propName] || []).map(preference =>
             applicantToApplicantId(instructorToInstructorId(preference))
         );
