@@ -76,13 +76,11 @@ function prepForApi(data) {
     const propName = "instructor_preferences";
     const [ret, filtered] = splitObjByProps(data, [propName]);
 
-    if (filtered.length <= 0) {
-        return data;
+    if (filtered.length > 0) {
+        ret[propName] = (filtered[propName] || []).map(preference =>
+            applicantToApplicantId(instructorToInstructorId(preference))
+        );
     }
-
-    ret[propName] = filtered[propName].map(preference =>
-        applicantToApplicantId(instructorToInstructorId(preference))
-    );
 
     return contractTemplateToContractTemplateId(
         instructorsToInstructorIds(ret)

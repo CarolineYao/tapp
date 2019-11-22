@@ -36,13 +36,11 @@ function prepForApi(data) {
     const propName = "position_preferences";
     const [ret, filtered] = splitObjByProps(data, [propName]);
 
-    if (filtered.length <= 0) {
-        return data;
+    if (filtered.length > 0) {
+        ret[propName] = (filtered[propName] || []).map(preference =>
+            positionToPositionId(preference)
+        );
     }
-
-    ret[propName] = filtered[propName].map(preference =>
-        positionToPositionId(preference)
-    );
 
     return applicantToApplicantId(ret);
 }
